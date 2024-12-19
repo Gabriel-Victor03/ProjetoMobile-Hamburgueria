@@ -26,7 +26,8 @@ class OrderController with ChangeNotifier {
         ..set('date', DateTime.now().toIso8601String());
 
       // Relacionar com Tipo_Entrega
-      final tipoEntrega = ParseObject('Tipo_Entrega')..objectId = deliveryTypeId;
+      final tipoEntrega = ParseObject('Tipo_Entrega')
+        ..objectId = deliveryTypeId;
       order.set('tipoEntrega', tipoEntrega);
 
       // Relacionar com Sacola
@@ -46,37 +47,45 @@ class OrderController with ChangeNotifier {
     }
   }
 
-  Future<void> fetchOrders() async {
+  Future<List<Map<String, String>>> fetchOrders() async {
     try {
-      final queryOrder = QueryBuilder<ParseObject>(ParseObject('Order'));
-
-      final responseOrder = await queryOrder.query();
+      QueryBuilder<ParseObject> query =
+          QueryBuilder<ParseObject>(ParseObject('Pedido'));
+      var responseOrder = await query.query();
 
       if (responseOrder.success && responseOrder.results != null) {
-        _orders.clear();
-        for (var item in responseOrder.results!) {
-          final order = item as ParseObject;
-          final name = order.get<String>('name');
-          final phone = order.get<String>('phone');
-          final total = order.get<num>('total')?.toDouble() ?? 0.0;
-          final status = order.get<String>('status');
+        List<Map<String, String>> orders = await Future.wait(
+          responseOrder.results!.map((e) async {
+            final order = e as ParseObject;
 
-          _orders.add({
-            'id': order.objectId,
-            'name': name,
-            'phone': phone,
-            'total': total,
-            'status': status,
-          });
+            // Otimizar a busca por dados relacionados
+            final relation = order.getRelation('sacola_produto');
+            final sacola = await relation.getQuery().first();
 
-          print("Pedido: $name, Telefone: $phone, Total: $total, Status: $status");
-        }
-        notifyListeners();
+            // Mapear os dados do objeto
+            return {
+              'id': order.objectId ?? 'ID não disponível',
+              'name': order.get<String>('name') ?? 'Nome não disponível',
+              'phone': order.get<String>('phone') ?? 'Telefone não disponível',
+              'total': order.get<num>('total')?.toStringAsFixed(2) ?? '0.00',
+              'status': order.get<String>('status') ?? 'Status não disponível',
+              'data': order.get<String>('data') ?? 'Data não disponível',
+              'hora': order.get<String>('hora') ?? 'Hora não disponível',
+              'tipo_entrega':
+                  order.get<String>('tipo_entrega') ?? 'Tipo não disponível',
+              'observacao': order.get<String>('observacao') ?? 'Sem observação',
+            };
+          }).toList(),
+        );
+
+        return orders;
       } else {
         print("Erro ao buscar pedidos: ${responseOrder.error?.message}");
+        return [];
       }
     } catch (e) {
       print("Erro ao buscar pedidos: $e");
+      return [];
     }
   }
 }
