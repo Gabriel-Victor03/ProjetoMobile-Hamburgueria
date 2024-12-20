@@ -24,11 +24,9 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(
-              Icons.login,
-              color: Colors.black,
-            ),
-            title: Text("Login", style: TextStyle(color: Colors.black)),
+            leading: const Icon(Icons.person,
+                color: Colors.black), // Ícone de perfil
+            title: const Text('Painel Administrativo'),
             onTap: () {
               Navigator.pushNamed(context, '/login');
             },
@@ -42,6 +40,40 @@ class MyDrawer extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Arial',
               ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 16.0, bottom: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Segunda a Quinta: 18:00 - 23:00',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontFamily: 'Arial',
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Sexta e Sábado: 18:00 - 01:00',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontFamily: 'Arial',
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Domingo: 17:00 - 23:00',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontFamily: 'Arial',
+                  ),
+                ),
+              ],
             ),
           ),
           ListTile(
@@ -65,14 +97,6 @@ class MyDrawer extends StatelessWidget {
                 fontFamily: 'Arial',
               ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.person,
-                color: Colors.black), // Ícone de perfil
-            title: const Text('Painel Administrativo'),
-            onTap: () {
-              Navigator.pushNamed(context, '/painel_adm');
-            },
           ),
         ],
       ),
