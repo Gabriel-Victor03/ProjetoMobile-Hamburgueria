@@ -10,36 +10,28 @@ class MyBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      type: BottomNavigationBarType
-          .shifting, // Habilita o efeito de ícone aumentado
+      type: BottomNavigationBarType.fixed,
       currentIndex: selectedIndex,
-      unselectedItemColor: const Color.fromARGB(
-          255, 85, 83, 83), // Cor dos ícones não selecionados
-      selectedItemColor: Colors.black,
-
-      // Cor do ícone selecionado
-      unselectedLabelStyle: const TextStyle(
-          color: Color.fromARGB(255, 0, 0, 0),
-          fontWeight: FontWeight.bold // Cor do label não selecionado
-          ),
+      selectedItemColor: Color.fromARGB(255, 130, 30, 60),
+      unselectedItemColor: const Color.fromARGB(255, 150, 150, 150),
+      iconSize: 28,
+      showUnselectedLabels: true,
       selectedLabelStyle: const TextStyle(
-        color: Colors.black, // Cor do label selecionado
+        fontSize: 14,
       ),
-      onTap: onItemTapped, // Função para alterar a página ao clicar
-
+      unselectedLabelStyle: const TextStyle(
+        fontSize: 12,
+      ),
+      backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+      onTap: onItemTapped,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.restaurant_outlined),
           label: 'Cardápio',
-
-          backgroundColor:
-              Color.fromARGB(255, 255, 255, 255), // Cor de fundo da aba 1
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_bag),
           label: 'Sacola',
-          backgroundColor:
-              Color.fromARGB(255, 255, 255, 255), // Cor de fundo da aba 2
         ),
       ],
     );
