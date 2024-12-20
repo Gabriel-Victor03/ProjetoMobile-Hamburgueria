@@ -22,8 +22,8 @@ class OrderController with ChangeNotifier {
         ..set('paymentMethod', paymentMethod)
         ..set('total', total)
         ..set('products', products)
-        ..set('status', 'pending')
-        ..set('date', DateTime.now().toIso8601String());
+        ..set('status', true) // Definindo status como booleano
+        ..set('date', DateTime.now());
 
       // Relacionar com Tipo_Entrega
       final tipoEntrega = ParseObject('Tipo_Entrega')..objectId = deliveryTypeId;
@@ -46,37 +46,50 @@ class OrderController with ChangeNotifier {
     }
   }
 
-  Future<void> fetchOrders() async {
+  Future<List<Map<String, String>>> fetchOrders() async {
     try {
-      final queryOrder = QueryBuilder<ParseObject>(ParseObject('Order'));
-
-      final responseOrder = await queryOrder.query();
+      QueryBuilder<ParseObject> query = QueryBuilder<ParseObject>(ParseObject('Pedido'));
+      var responseOrder = await query.query();
 
       if (responseOrder.success && responseOrder.results != null) {
-        _orders.clear();
-        for (var item in responseOrder.results!) {
-          final order = item as ParseObject;
-          final name = order.get<String>('name');
-          final phone = order.get<String>('phone');
-          final total = order.get<num>('total')?.toDouble() ?? 0.0;
-          final status = order.get<String>('status');
+        List<Map<String, String>> orders = await Future.wait(
+          responseOrder.results!.map((e) async {
+            final order = e as ParseObject;
 
-          _orders.add({
-            'id': order.objectId,
-            'name': name,
-            'phone': phone,
-            'total': total,
-            'status': status,
-          });
+            // Obter a relação com Produto_Sacola
+            final relation = order.getRelation('produto_sacola'); // Certifique-se de que o nome da relação está correto
+            final sacolaProdutos = await relation.getQuery().find();
 
-          print("Pedido: $name, Telefone: $phone, Total: $total, Status: $status");
-        }
-        notifyListeners();
+            // Verifique se a relação está retornando resultados
+            print("Produtos na sacola para o pedido ${order.objectId}: ${sacolaProdutos.length}");
+
+            // Calcular a quantidade total de produtos na sacola
+            int quantidadeTotal = sacolaProdutos.fold(0, (sum, item) {
+              return sum + (item.get<int>('quantidade') ?? 0);
+            });
+
+            // Mapear os dados do objeto
+            return {
+              'id': order.objectId ?? '',
+              'nome': order.get<String>('nome') ?? '',
+              'Telefone': order.get<String>('Telefone') ?? '',
+              'preco_total': order.get<num>('preco_total')?.toStringAsFixed(2) ?? '0.00',
+              'Status': order.get<bool>('Status') != null ? (order.get<bool>('Status')! ? 'true' : 'false') : 'Status não disponível',
+              'data': order.get<DateTime>('data')?.toIso8601String() ?? '',
+              'hora': order.get<String>('hora') ?? '',
+              'quantidade': quantidadeTotal.toString(), // Adicione a quantidade total
+            };
+          }).toList(),
+        );
+
+        return orders;
       } else {
         print("Erro ao buscar pedidos: ${responseOrder.error?.message}");
+        return [];
       }
     } catch (e) {
       print("Erro ao buscar pedidos: $e");
+      return [];
     }
   }
 }
