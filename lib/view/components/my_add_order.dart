@@ -40,7 +40,7 @@ class _AddOrderButtonState extends State<AddOrderButton> {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: double.infinity,
+        width: 200.0,
         child: ElevatedButton.icon(
           onPressed: _isProcessing
               ? null
@@ -66,8 +66,13 @@ class _AddOrderButtonState extends State<AddOrderButton> {
                     ..set('data', DateTime.now())
                     ..set('hora', DateTime.now().toIso8601String())
                     ..set('observacao', '')
-                    ..addRelation('tipo_entrega_pedido', [ParseObject('Tipo_Entrega')..objectId = deliveryTypeId])
-                    ..addRelation('sacola_pedido', [ParseObject('Sacola')..objectId = widget.sacolaController.sacolaAtualId])
+                    ..addRelation('tipo_entrega_pedido', [
+                      ParseObject('Tipo_Entrega')..objectId = deliveryTypeId
+                    ])
+                    ..addRelation('sacola_pedido', [
+                      ParseObject('Sacola')
+                        ..objectId = widget.sacolaController.sacolaAtualId
+                    ])
                     ..set('preco_total', widget.total);
 
                   final response = await pedido.save();
@@ -86,7 +91,8 @@ class _AddOrderButtonState extends State<AddOrderButton> {
                 },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromARGB(255, 53, 155, 56),
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
@@ -98,7 +104,7 @@ class _AddOrderButtonState extends State<AddOrderButton> {
                 )
               : const Icon(Icons.check, color: Colors.white),
           label: Text(
-            _isProcessing ? "Processando..." : "Finalizar Compra",
+            _isProcessing ? "Processando..." : "Finalizar pedido",
             style: const TextStyle(
               color: Colors.white,
               fontSize: 16,

@@ -90,9 +90,9 @@ class _CartPageState extends State<CartPage> {
                 children: [
                   Center(
                     child: Text(
-                      'SACOLA',
+                      'Sacola',
                       style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 130, 30, 60)),
                     ),
@@ -108,8 +108,8 @@ class _CartPageState extends State<CartPage> {
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       final product = products[index];
-                      final productTotal =
-                          formatter.format(product['price'] * product['quantity']);
+                      final productTotal = formatter
+                          .format(product['price'] * product['quantity']);
                       final produtoId = product['id'];
                       return Column(
                         children: [
@@ -123,7 +123,7 @@ class _CartPageState extends State<CartPage> {
                                       '${product['quantity']}x',
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
-                                        fontSize: 18,
+                                        fontSize: 12,
                                         fontFamily: 'Arial',
                                         color: Color.fromARGB(255, 0, 0, 0),
                                       ),
@@ -133,7 +133,7 @@ class _CartPageState extends State<CartPage> {
                                       '${product['name']}',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 19,
+                                        fontSize: 16,
                                         fontFamily: 'Arial',
                                         color: Color.fromARGB(255, 0, 0, 0),
                                       ),
@@ -144,7 +144,7 @@ class _CartPageState extends State<CartPage> {
                                   'Total: $productTotal',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 19,
+                                    fontSize: 16,
                                     fontFamily: 'Arial',
                                     color: Color.fromARGB(255, 0, 0, 0),
                                   ),
@@ -157,8 +157,10 @@ class _CartPageState extends State<CartPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                      'Preço Unitário: ${formatter.format(product['price'])}'),
-                                  Text('Observações: '),
+                                      'Preço Unitário: ${formatter.format(product['price'])}',
+                                      style: TextStyle(fontSize: 12)),
+                                  Text('Observações: ',
+                                      style: TextStyle(fontSize: 12)),
                                   Align(
                                     alignment: Alignment.centerRight,
                                     heightFactor: 0.5,
@@ -167,21 +169,28 @@ class _CartPageState extends State<CartPage> {
                                       color: Colors.black,
                                       onPressed: () async {
                                         setState(() {
-                                          isLoading = true; // Inicia o carregamento
+                                          isLoading =
+                                              true; // Inicia o carregamento
                                         });
 
-                                        await sacolaController.removerDaSacola(produtoId);
+                                        await sacolaController
+                                            .removerDaSacola(produtoId);
 
                                         setState(() {
-                                          isLoading = false; // Finaliza o carregamento
+                                          isLoading =
+                                              false; // Finaliza o carregamento
                                           products = sacolaController.products;
                                         });
 
                                         // Exibe um SnackBar com a mensagem de sucesso
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           SnackBar(
-                                            content: Text('Produto removido com sucesso!'),
-                                            backgroundColor: const Color.fromARGB(255, 187, 217, 36),
+                                            content: Text(
+                                                'Produto removido com sucesso!'),
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 187, 217, 36),
                                             duration: Duration(seconds: 2),
                                           ),
                                         );
@@ -217,7 +226,7 @@ class _CartPageState extends State<CartPage> {
                             child: Text(
                               'Dados',
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -242,12 +251,12 @@ class _CartPageState extends State<CartPage> {
                                 style: TextStyle(
                                   fontFamily: 'arial',
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontSize: 18,
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
-                            SizedBox(height: 8),
+                            SizedBox(height: 3),
                             Padding(
                               padding: EdgeInsets.only(left: 14.0),
                               child: Container(
@@ -262,7 +271,10 @@ class _CartPageState extends State<CartPage> {
                                     filled: true,
                                     fillColor: Colors.white,
                                   ),
-                                  style: TextStyle(fontSize: 13),
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: const Color.fromARGB(
+                                          255, 154, 154, 154)),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Por favor, preencha este campo';
@@ -281,17 +293,18 @@ class _CartPageState extends State<CartPage> {
                                   fontFamily: 'arial',
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
-                                  fontSize: 18,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
-                            SizedBox(height: 8),
+                            SizedBox(height: 3),
                             Padding(
                               padding: EdgeInsets.only(left: 14.0),
                               child: Container(
                                 height: 40.0,
                                 width: MediaQuery.of(context).size.width / 2,
-                                child: PhoneInputField(controller: phoneController),
+                                child: PhoneInputField(
+                                    controller: phoneController),
                               ),
                             ),
                           ],
@@ -308,9 +321,9 @@ class _CartPageState extends State<CartPage> {
                           padding: const EdgeInsets.symmetric(vertical: 3.0),
                           child: Center(
                             child: Text(
-                              'Forma de Entrega',
+                              'Entrega',
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -345,7 +358,7 @@ class _CartPageState extends State<CartPage> {
                                     'Retirada no balcão',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                       fontFamily: 'Arial',
                                     ),
@@ -370,7 +383,7 @@ class _CartPageState extends State<CartPage> {
                                     'Delivery',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                       fontFamily: 'Arial',
                                     ),
@@ -379,7 +392,7 @@ class _CartPageState extends State<CartPage> {
                                     '(R\$5,00)',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 14,
                                       fontStyle: FontStyle.italic,
                                       fontFamily: 'Arial',
                                       color: Color.fromARGB(150, 50, 50, 50),
@@ -405,7 +418,8 @@ class _CartPageState extends State<CartPage> {
                                       );
                                     }
                                   : null,
-                              icon: Icon(Icons.location_on, color: Colors.black),
+                              icon:
+                                  Icon(Icons.location_on, color: Colors.black),
                               label: Text(
                                 'Informar Endereço',
                                 style: TextStyle(
@@ -417,7 +431,8 @@ class _CartPageState extends State<CartPage> {
                                 backgroundColor:
                                     const Color.fromARGB(255, 255, 221, 0),
                                 padding: EdgeInsets.symmetric(vertical: 15),
-                                disabledBackgroundColor: Colors.grey,
+                                disabledBackgroundColor:
+                                    const Color.fromARGB(255, 140, 140, 140),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
@@ -428,7 +443,7 @@ class _CartPageState extends State<CartPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 18),
                   Row(
                     children: [
                       Expanded(
@@ -437,9 +452,9 @@ class _CartPageState extends State<CartPage> {
                           padding: const EdgeInsets.symmetric(vertical: 3.0),
                           child: Center(
                             child: Text(
-                              'Forma de Pagamento',
+                              'Pagamento',
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -450,7 +465,8 @@ class _CartPageState extends State<CartPage> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 30.0, left: 30, top: 9),
+                    padding:
+                        const EdgeInsets.only(right: 30.0, left: 30, top: 9),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -468,7 +484,7 @@ class _CartPageState extends State<CartPage> {
                             const Text('Cartão',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.normal,
                                     fontFamily: 'Arial')),
                           ],
@@ -487,7 +503,7 @@ class _CartPageState extends State<CartPage> {
                             const Text('Dinheiro',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.normal,
                                     fontFamily: 'Arial')),
                           ],
@@ -506,7 +522,7 @@ class _CartPageState extends State<CartPage> {
                             const Text('Pix',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.normal,
                                     fontFamily: 'Arial')),
                           ],
@@ -529,15 +545,18 @@ class _CartPageState extends State<CartPage> {
                             const Text(
                               'Pedido:',
                               style: TextStyle(
-                                  fontSize: 19,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Arial'),
                             ),
                             Spacer(),
                             Text(
-                              formatter.format(total - (deliveryType == 'Delivery' ? deliveryFee : 0)),
+                              formatter.format(total -
+                                  (deliveryType == 'Delivery'
+                                      ? deliveryFee
+                                      : 0)),
                               style: const TextStyle(
-                                  fontSize: 19,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Arial'),
                             ),
@@ -550,7 +569,7 @@ class _CartPageState extends State<CartPage> {
                               const Text(
                                 'Frete:',
                                 style: TextStyle(
-                                    fontSize: 19,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Arial'),
                               ),
@@ -558,7 +577,7 @@ class _CartPageState extends State<CartPage> {
                               Text(
                                 formatter.format(deliveryFee),
                                 style: const TextStyle(
-                                    fontSize: 19,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Arial'),
                               ),
@@ -573,14 +592,14 @@ class _CartPageState extends State<CartPage> {
                     endIndent: 10.0,
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 18.0, left: 18, right: 18),
+                    padding: const EdgeInsets.only(
+                        bottom: 18.0, left: 18, right: 18),
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
                         'Total: ${formatter.format(total)}',
                         style: const TextStyle(
-                            fontSize: 19,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Arial'),
                       ),
@@ -592,10 +611,13 @@ class _CartPageState extends State<CartPage> {
                     deliveryType: deliveryType!,
                     paymentMethod: paymentMethod!,
                     total: total,
-                    products: products.map((product) => product['name'] as String).toList(),
+                    products: products
+                        .map((product) => product['name'] as String)
+                        .toList(),
                     sacolaController: sacolaController,
                     onOrderCompleted: _onOrderCompleted,
                   ),
+                  const SizedBox(height: 25),
                 ],
               ),
             ),
