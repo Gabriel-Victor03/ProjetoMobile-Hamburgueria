@@ -22,12 +22,11 @@ class OrderController with ChangeNotifier {
         ..set('paymentMethod', paymentMethod)
         ..set('total', total)
         ..set('products', products)
-        ..set('status', 'pending')
-        ..set('date', DateTime.now().toIso8601String());
+        ..set('status', true) // Definindo status como booleano
+        ..set('date', DateTime.now());
 
       // Relacionar com Tipo_Entrega
-      final tipoEntrega = ParseObject('Tipo_Entrega')
-        ..objectId = deliveryTypeId;
+      final tipoEntrega = ParseObject('Tipo_Entrega')..objectId = deliveryTypeId;
       order.set('tipoEntrega', tipoEntrega);
 
       // Relacionar com Sacola
@@ -49,8 +48,7 @@ class OrderController with ChangeNotifier {
 
   Future<List<Map<String, String>>> fetchOrders() async {
     try {
-      QueryBuilder<ParseObject> query =
-          QueryBuilder<ParseObject>(ParseObject('Pedido'));
+      QueryBuilder<ParseObject> query = QueryBuilder<ParseObject>(ParseObject('Pedido'));
       var responseOrder = await query.query();
 
       if (responseOrder.success && responseOrder.results != null) {
@@ -58,21 +56,28 @@ class OrderController with ChangeNotifier {
           responseOrder.results!.map((e) async {
             final order = e as ParseObject;
 
+            // Debugging: Print each order's data
+            print("Order ID: ${order.objectId}");
+            print("Order Nome: ${order.get<String>('nome')}");
+            print("Order Telefone: ${order.get<String>('Telefone')}");
+
             // Otimizar a busca por dados relacionados
-            final relation = order.getRelation('sacola_produto');
-            final sacola = await relation.getQuery().first();
+            final tipoEntregaRelation = order.getRelation('tipo_entrega_pedido');
+            final tipoEntrega = await tipoEntregaRelation.getQuery().first();
+
+            final sacolaRelation = order.getRelation('sacola_pedido');
+            final sacola = await sacolaRelation.getQuery().first();
 
             // Mapear os dados do objeto
             return {
-              'id': order.objectId ?? 'ID não disponível',
-              'name': order.get<String>('name') ?? 'Nome não disponível',
-              'phone': order.get<String>('phone') ?? 'Telefone não disponível',
-              'total': order.get<num>('total')?.toStringAsFixed(2) ?? '0.00',
-              'status': order.get<String>('status') ?? 'Status não disponível',
-              'data': order.get<String>('data') ?? 'Data não disponível',
-              'hora': order.get<String>('hora') ?? 'Hora não disponível',
-              'tipo_entrega':
-                  order.get<String>('tipo_entrega') ?? 'Tipo não disponível',
+              'id': order.objectId ?? '',
+              'nome': order.get<String>('nome') ?? '',
+              'Telefone': order.get<String>('Telefone') ?? '',
+              'preco_total': order.get<num>('preco_total')?.toStringAsFixed(2) ?? '0.00',
+              'Status': order.get<bool>('Status') != null ? (order.get<bool>('Status')! ? 'true' : 'false') : 'Status não disponível',
+              'data': order.get<DateTime>('data')?.toIso8601String() ?? '',
+              'hora': order.get<String>('hora') ?? '',
+              'tipo_entrega': tipoEntrega?.get<String>('nome') ?? 'Tipo de entrega não disponível',
               'observacao': order.get<String>('observacao') ?? 'Sem observação',
             };
           }).toList(),
@@ -87,5 +92,5 @@ class OrderController with ChangeNotifier {
       print("Erro ao buscar pedidos: $e");
       return [];
     }
-  }
+}
 }
