@@ -56,17 +56,17 @@ class OrderController with ChangeNotifier {
           responseOrder.results!.map((e) async {
             final order = e as ParseObject;
 
-            // Debugging: Print each order's data
-            print("Order ID: ${order.objectId}");
-            print("Order Nome: ${order.get<String>('nome')}");
-            print("Order Telefone: ${order.get<String>('Telefone')}");
+            // Obter a relação com Produto_Sacola
+            final relation = order.getRelation('produto_sacola'); // Certifique-se de que o nome da relação está correto
+            final sacolaProdutos = await relation.getQuery().find();
 
-            // Otimizar a busca por dados relacionados
-            final tipoEntregaRelation = order.getRelation('tipo_entrega_pedido');
-            final tipoEntrega = await tipoEntregaRelation.getQuery().first();
+            // Verifique se a relação está retornando resultados
+            print("Produtos na sacola para o pedido ${order.objectId}: ${sacolaProdutos.length}");
 
-            final sacolaRelation = order.getRelation('sacola_pedido');
-            final sacola = await sacolaRelation.getQuery().first();
+            // Calcular a quantidade total de produtos na sacola
+            int quantidadeTotal = sacolaProdutos.fold(0, (sum, item) {
+              return sum + (item.get<int>('quantidade') ?? 0);
+            });
 
             // Mapear os dados do objeto
             return {
@@ -77,8 +77,7 @@ class OrderController with ChangeNotifier {
               'Status': order.get<bool>('Status') != null ? (order.get<bool>('Status')! ? 'true' : 'false') : 'Status não disponível',
               'data': order.get<DateTime>('data')?.toIso8601String() ?? '',
               'hora': order.get<String>('hora') ?? '',
-              'tipo_entrega': tipoEntrega?.get<String>('nome') ?? 'Tipo de entrega não disponível',
-              'observacao': order.get<String>('observacao') ?? 'Sem observação',
+              'quantidade': quantidadeTotal.toString(), // Adicione a quantidade total
             };
           }).toList(),
         );
@@ -92,5 +91,5 @@ class OrderController with ChangeNotifier {
       print("Erro ao buscar pedidos: $e");
       return [];
     }
-}
+  }
 }

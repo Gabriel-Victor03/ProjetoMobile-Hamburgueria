@@ -104,7 +104,7 @@ class _OrdersPagesState extends State<OrdersPages> {
                     itemCount: orders.length,
                     itemBuilder: (context, index) {
                       final order = orders[index];
-                      bool isActive = order['status'] == 'true'; // Check status
+                      bool isActive = order['Status'] == 'true'; // Check status
 
                       return Container(
                         decoration: BoxDecoration(
@@ -118,7 +118,7 @@ class _OrdersPagesState extends State<OrdersPages> {
                                 value: isActive,
                                 onChanged: (value) {
                                   setState(() {
-                                    orders[index]['status'] = value! ? 'true' : 'false';
+                                    orders[index]['Status'] = value! ? 'true' : 'false';
                                   });
                                 },
                               ),
@@ -137,7 +137,7 @@ class _OrdersPagesState extends State<OrdersPages> {
                             ),
                             Expanded(
                               child: Text(
-                                order["name"] ?? '',
+                                order["nome"] ?? '',
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -162,10 +162,11 @@ class _OrdersPagesState extends State<OrdersPages> {
                                     onPressed: () {
                                       openDetails(
                                         order['id'].toString(),
-                                        order['name'].toString(),
-                                        order['phone'].toString(),
-                                        order['total'].toString(),
-                                        order['status'].toString(),
+                                        order['nome'].toString(),
+                                        order['Telefone'].toString(),
+                                        order['preco_total'].toString(),
+                                        order['Status'].toString(),
+                                        order['quantidade'].toString(),
                                       );
                                     },
                                     child: Transform.rotate(
@@ -196,10 +197,11 @@ class _OrdersPagesState extends State<OrdersPages> {
 
   Future openDetails(
     String id,
-    String name,
-    String phone,
-    String total,
+    String nome,
+    String telefone,
+    String precoTotal,
     String status,
+    String quantidade, // Adicione a quantidade aqui
   ) =>
       showDialog(
         context: context,
@@ -260,7 +262,7 @@ class _OrdersPagesState extends State<OrdersPages> {
                               ),
                             ),
                             TextSpan(
-                              text: name,
+                              text: nome,
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 20,
@@ -311,16 +313,7 @@ class _OrdersPagesState extends State<OrdersPages> {
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                    child: Text(
-                                      'Add',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
+
                                   Container(
                                     child: Text(
                                       'Observações',
@@ -353,7 +346,7 @@ class _OrdersPagesState extends State<OrdersPages> {
                                               Container(
                                                 margin: EdgeInsets.fromLTRB(11, 0, 5, 0),
                                                 child: Text(
-                                                  '0',
+                                                  quantidade, // Exiba a quantidade aqui
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(fontSize: 12),
                                                 ),
@@ -363,15 +356,6 @@ class _OrdersPagesState extends State<OrdersPages> {
                                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                                 child: Text(
                                                   'teste',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(fontSize: 12),
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                                width: 65,
-                                                child: Text(
-                                                  '0',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(fontSize: 12),
                                                 ),
