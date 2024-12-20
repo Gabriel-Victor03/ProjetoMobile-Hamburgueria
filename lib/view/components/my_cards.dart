@@ -59,7 +59,8 @@ class _MyCardsState extends State<MyCards> {
           'id': product.objectId ?? '',
           'category': categoryName,
           'title': product.get<String>('nome') ?? 'Nome não disponível',
-          'description': product.get<String>('descricao') ?? 'Descrição não disponível',
+          'description':
+              product.get<String>('descricao') ?? 'Descrição não disponível',
           'image': (product.get<ParseFile>('image_produto')?.url) ?? '',
           'preco': product.get<num>('preco')?.toStringAsFixed(2) ?? '0.00',
         };
@@ -80,7 +81,8 @@ class _MyCardsState extends State<MyCards> {
     }
   }
 
-  Future<void> openDialog(BuildContext context, Map<String, String> product) async {
+  Future<void> openDialog(
+      BuildContext context, Map<String, String> product) async {
     setState(() {
       _counterQuantidade = 1;
       _valorTotal = double.tryParse(product['preco'] ?? '0') ?? 0.0;
@@ -108,14 +110,16 @@ class _MyCardsState extends State<MyCards> {
                         Text(
                           product['title'] ?? 'Nome não disponível',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                         Divider(color: Colors.black),
                         Image.network(product['image'] ?? '', height: 150),
                         SizedBox(height: 10),
-                        Text(product['description'] ?? 'Descrição não disponível'),
+                        Text(product['description'] ??
+                            'Descrição não disponível'),
                         Divider(color: Colors.black),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,7 +139,9 @@ class _MyCardsState extends State<MyCards> {
                                       setState(() {
                                         _counterQuantidade--;
                                         _valorTotal = _counterQuantidade *
-                                            (double.tryParse(product['preco'] ?? '0') ?? 0.0);
+                                            (double.tryParse(
+                                                    product['preco'] ?? '0') ??
+                                                0.0);
                                       });
                                       setStateDialog(() {});
                                     }
@@ -151,7 +157,9 @@ class _MyCardsState extends State<MyCards> {
                                     setState(() {
                                       _counterQuantidade++;
                                       _valorTotal = _counterQuantidade *
-                                          (double.tryParse(product['preco'] ?? '0') ?? 0.0);
+                                          (double.tryParse(
+                                                  product['preco'] ?? '0') ??
+                                              0.0);
                                     });
                                     setStateDialog(() {});
                                   },
@@ -173,7 +181,9 @@ class _MyCardsState extends State<MyCards> {
                               ),
                             ),
                             Text(
-                              NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$').format(_valorTotal),
+                              NumberFormat.currency(
+                                      locale: 'pt_BR', symbol: 'R\$')
+                                  .format(_valorTotal),
                               style: TextStyle(fontSize: 18),
                             ),
                           ],
@@ -217,7 +227,7 @@ class _MyCardsState extends State<MyCards> {
                 final categoryProducts = entry.value;
 
                 return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       categoryName,
@@ -242,7 +252,7 @@ class _MyCardsState extends State<MyCards> {
                         return Container(
                           width: MediaQuery.of(context).size.width * 0.45,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Color.fromARGB(255, 255, 248, 235),
                             borderRadius: BorderRadius.circular(15),
                             boxShadow: [
                               BoxShadow(
@@ -274,16 +284,20 @@ class _MyCardsState extends State<MyCards> {
                                 ),
                                 Text(
                                   _truncateText(
-                                    product['description'] ?? 'Descrição não disponível',
+                                    product['description'] ??
+                                        'Descrição não disponível',
                                     30,
                                   ),
                                   style: TextStyle(fontSize: 12),
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      formatarPreco(double.tryParse(product['preco'] ?? '0.00') ?? 0.00),
+                                      formatarPreco(double.tryParse(
+                                              product['preco'] ?? '0.00') ??
+                                          0.00),
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -303,7 +317,8 @@ class _MyCardsState extends State<MyCards> {
                                           color: Colors.white,
                                           size: 18,
                                         ),
-                                        onPressed: () => openDialog(context, product),
+                                        onPressed: () =>
+                                            openDialog(context, product),
                                         padding: EdgeInsets.zero,
                                         constraints: BoxConstraints(),
                                       ),
